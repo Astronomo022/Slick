@@ -10,11 +10,17 @@ public class PlayerController : MonoBehaviour
 
     // Defines which layers should be stood on
     public LayerMask groundLayer;
+    // Which particles to play on jump or landing
+    public ParticleSystem dustParticleSystem;
 
     private Rigidbody2D rb;
 
     private InputAction m_MoveAction;
     private InputAction m_JumpAction;
+
+    // Whether player was on the ground in previous tick; used 
+    // to figure out when to make dust particles
+    private bool wasGrounded = false;
 
 
     void Awake()
@@ -30,16 +36,22 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        
         // Handle horizontal movement
         float moveHorizontal = m_MoveAction.ReadValue<Vector2>().x;
         rb.linearVelocity = new Vector2(moveHorizontal * moveSpeed, rb.linearVelocity.y);
         
+        bool isGrounded = IsGrounded();
+        // Show dust particles when the player lands 
+        if(!wasGrounded && isGrounded)
+        {
+            dustParticleSystem.Play();
+        }
         // Handle jumping
-        if (m_JumpAction.WasPressedThisFrame() && IsGrounded())
+        if (m_JumpAction.WasPressedThisFrame() && isGrounded)
         {
             Jump();
         }
+        wasGrounded = isGrounded;
     }
 
     /// <summary>
@@ -47,7 +59,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     bool IsGrounded()
     {
-        Debug.DrawRay(transform.position, Vector2.down, Color.green);
+        //Debug.DrawRay(transform.position, Vector2.down, Color.green);
         RaycastHit2D raycast = Physics2D.Raycast(
             transform.position, Vector2.down, 1.25f, groundLayer);
         return raycast.collider != null;
@@ -59,5 +71,6 @@ public class PlayerController : MonoBehaviour
     void Jump()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        dustParticleSystem.Play();
     }
 }
