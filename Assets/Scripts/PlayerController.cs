@@ -8,24 +8,37 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
     public float jumpForce = 5f;
 
+    public float groundCheckDistance = 0.1f;
+    public float groundCheckBoxWidth = 1.5f;
+
     // Defines which layers should be stood on
     public LayerMask groundLayer;
     // Which particles to play on jump or landing
     public ParticleSystem dustParticleSystem;
 
     private Rigidbody2D rb;
+    private BoxCollider2D bc;
 
     private InputAction m_MoveAction;
     private InputAction m_JumpAction;
 
+    private float playerHeight, playerWidth;
     // Whether player was on the ground in previous tick; used 
     // to figure out when to make dust particles
     private bool wasGrounded = false;
-
+    // Defines the object which 
+    private Vector2 groundCheckBoxSize;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        bc = GetComponent<BoxCollider2D>();
+
+        playerHeight = bc.size.y;
+        playerWidth = bc.size.x;
+        groundCheckBoxSize = new Vector2(
+            groundCheckBoxWidth, groundCheckDistance
+        );
 
         m_MoveAction = InputSystem.actions.FindAction("Player/Move");
         m_JumpAction = InputSystem.actions.FindAction("Player/Jump");
@@ -47,7 +60,7 @@ public class PlayerController : MonoBehaviour
             dustParticleSystem.Play();
         }
         // Handle jumping
-        if (m_JumpAction.WasPressedThisFrame() && isGrounded)
+        if (m_JumpAction.IsPressed() && isGrounded)
         {
             Jump();
         }
@@ -59,9 +72,37 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     bool IsGrounded()
     {
-        //Debug.DrawRay(transform.position, Vector2.down, Color.green);
+        //Debug.DrawRay(transform.position, Vector2.down * (playerHeight / 2 + groundCheckDistance), Color.green);
         RaycastHit2D raycast = Physics2D.Raycast(
-            transform.position, Vector2.down, 1.25f, groundLayer);
+            transform.position, Vector2.down, playerHeight / 2 + groundCheckDistance, groundLayer);
+        
+        /*
+        RaycastHit2D raycast = Physics2D.BoxCast(
+            new Vector2(
+                transform.position.x,
+                transform.position.y - playerHeight / 2
+            ),                      // origin
+            groundCheckBoxSize,     // size
+            0,                      // angle
+            Vector2.down,           // direction
+            groundCheckDistance,    // distance
+            groundLayer             // layerMask
+        );
+
+        BoxCastDrawer.Draw(
+            raycast,            // hitInfo
+            new Vector2(
+                transform.position.x,
+                transform.position.y - playerHeight / 2
+            ),                  // origin
+            groundCheckBoxSize, // size
+            0,                  // angle
+            Vector2.down,       // direction
+            groundCheckDistance // distance
+        );
+        */
+
+        
         return raycast.collider != null;
     }
 
