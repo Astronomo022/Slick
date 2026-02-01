@@ -183,12 +183,15 @@ MonoBehaviour:
   moveSpeed: 10
   jumpForce: 15
   gravityScale: 3
-  groundCheckDistance: 0.1
-  groundCheckBoxWidth: 0.95
   coyoteTime: 0.1
   numDashes: 1
   dashSpeed: 10
   dashTime: 0.25
+  twirlSpeed: 15
+  canTwirlTime: 0.35
+  groundCheckBoxHeight: 0.1
+  groundCheckBoxWidth: 1
+  wallCheckDistance: 0.1
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
