@@ -22,8 +22,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float coyoteTime = 0.2f;
 
     [Header("Dashing")]
+    [SerializeField] private int numDashes = 1; 
     [SerializeField] private float dashSpeed = 5f;
-
     [SerializeField] private float dashTime = 0.5f;
 
     [Header("Components")]
@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     private float playerHeight, playerWidth;
     // Whether player was on the ground in previous tick;  
     // used to figure out when to make dust particles
+    private Direction direction;
     private bool wasGrounded = false;
     //private Vector2 groundCheckBoxSize;
     // Timer which counts down after leaving ground, 
@@ -52,8 +53,8 @@ public class PlayerController : MonoBehaviour
     private float dashTimeCounter = 0f;
     // Direction of the player when instatiating the dash
     private Direction dashDirection = Direction.Right;
-
-    private Direction direction;
+    // How many more dashes can the player use before landing
+    private int numDashesLeft; 
 
     void Awake()
     {
@@ -65,6 +66,7 @@ public class PlayerController : MonoBehaviour
         /*groundCheckBoxSize = new Vector2(
             groundCheckBoxWidth, groundCheckDistance
         );*/
+        numDashesLeft = numDashes;
         
         m_MoveAction = InputSystem.actions.FindAction("Player/Move");
         m_JumpAction = InputSystem.actions.FindAction("Player/Jump");
@@ -72,7 +74,6 @@ public class PlayerController : MonoBehaviour
         m_MoveAction.Enable();
         m_JumpAction.Enable();
         m_DashAction.Enable();
-
     }
     
     void Update()
@@ -106,6 +107,10 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
         wasGrounded = isGrounded;
+        if (isGrounded)
+        {
+            numDashesLeft = numDashes;
+        }
 
         // Freeze gravity when dashing
         if (dashTimeCounter > 0f)
@@ -127,24 +132,16 @@ public class PlayerController : MonoBehaviour
         {
             // Standard movement
             float moveHorizontal = m_MoveAction.ReadValue<Vector2>().x;
-            if (moveHorizontal > 0f)
-            {
-                direction = Direction.Right;
-            } 
-            else if (moveHorizontal < 0f)
-            {
-                direction = Direction.Left;
-            }
+            if (moveHorizontal > 0f) { direction = Direction.Right; } 
+            else if (moveHorizontal < 0f) { direction = Direction.Left; }
             rb.linearVelocity = new Vector2(moveHorizontal * moveSpeed, rb.linearVelocity.y);
 
             // Dashing
-            if (m_DashAction.IsPressed())
+            if (m_DashAction.WasPressedThisFrame() && numDashesLeft > 0)
             {
                 Dash();
             }
         }
-
-
     }
 
     /// <summary>
@@ -200,8 +197,13 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Dash()
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
-        dashDirection = direction;
-        dashTimeCounter = dashTime;
+        // This shouldn't be a necessary condition, but just in case...
+        if (numDashesLeft > 0)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+            dashDirection = direction;
+            dashTimeCounter = dashTime;
+            numDashesLeft -= 1;
+        }
     }
 }
