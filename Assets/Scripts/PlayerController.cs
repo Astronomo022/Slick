@@ -45,8 +45,6 @@ public class PlayerController : MonoBehaviour
     // used to figure out when to make dust particles
     private Direction direction;
     private bool wasGrounded = false;
-    // Width of the area under the player to check for grounded-ness
-    private Vector2 groundCheckBoxSize;
     // Timer which counts down after leaving ground, 
     // allowing "coyote-time" jumping  
     private float coyoteTimeCounter = 0f;
@@ -66,10 +64,6 @@ public class PlayerController : MonoBehaviour
         playerWidth = bc.size.x;
         numDashesLeft = numDashes;
         
-        groundCheckBoxSize = new Vector2(
-            groundCheckBoxWidth, groundCheckDistance
-        );
-
         m_MoveAction = InputSystem.actions.FindAction("Player/Move");
         m_JumpAction = InputSystem.actions.FindAction("Player/Jump");
         m_DashAction = InputSystem.actions.FindAction("Player/Dash");
@@ -104,6 +98,9 @@ public class PlayerController : MonoBehaviour
             dustParticleSystem.Play();
         }
         // Handle jumping
+        /*if (m_JumpAction.IsPressed()) {
+            Debug.Log(coyoteTimeCounter);
+        }*/
         if (m_JumpAction.IsPressed() && coyoteTimeCounter > 0f)
         {
             Jump();
@@ -158,12 +155,17 @@ public class PlayerController : MonoBehaviour
             transform.position, Vector2.down, playerHeight / 2 + groundCheckDistance, groundLayer);
         */
         
+        Vector2 groundCheckBox = new Vector2(
+            groundCheckBoxWidth, groundCheckDistance
+        );
+
         RaycastHit2D raycast = Physics2D.BoxCast(
+
             new Vector2(
                 transform.position.x,
                 transform.position.y - playerHeight / 2
             ),                      // origin
-            groundCheckBoxSize,     // size
+            groundCheckBox,         // size
             0,                      // angle
             Vector2.down,           // direction
             groundCheckDistance,    // distance
@@ -176,13 +178,19 @@ public class PlayerController : MonoBehaviour
                 transform.position.x,
                 transform.position.y - playerHeight / 2
             ),                  // origin
-            groundCheckBoxSize, // size
+            groundCheckBox,     // size
             0,                  // angle
             Vector2.down,       // direction
             groundCheckDistance // distance
         );
         
-        return raycast.collider != null;
+        /*if (raycast)
+        {
+            Debug.Log(Vector2.Dot(raycast.normal, Vector2.up));
+            Debug.DrawLine(raycast.point, raycast.point + raycast.normal, Color.blue);
+        }*/
+
+        return (raycast.collider != null) && (Vector2.Dot(raycast.normal, Vector2.up) > 0);
     }
 
     /// <summary>

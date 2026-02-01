@@ -184,7 +184,9 @@ MonoBehaviour:
   jumpForce: 15
   gravityScale: 3
   groundCheckDistance: 0.1
+  groundCheckBoxWidth: 0.95
   coyoteTime: 0.1
+  numDashes: 1
   dashSpeed: 10
   dashTime: 0.25
   groundLayer:
