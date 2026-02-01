@@ -5,13 +5,28 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float jumpForce = 5f;
+    enum Direction : int
+    {
+        Left = -1,
+        Right = 1,
+        None = 0
+    }
 
+    [SerializeField] private float moveSpeed = 5f;
+
+    [Header("Jumping")]
+    [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float gravityScale = 3f;
     [SerializeField] private float groundCheckDistance = 0.1f;
     //public float groundCheckBoxWidth = 1.5f;
     [SerializeField] private float coyoteTime = 0.2f;
 
+    [Header("Dashing")]
+    [SerializeField] private float dashSpeed = 5f;
+
+    [SerializeField] private float dashTime = 0.5f;
+
+    [Header("Components")]
     // Defines which layers should be stood on
     [SerializeField] private LayerMask groundLayer;
     // Which particles to play on jump or landing
@@ -22,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
     private InputAction m_MoveAction;
     private InputAction m_JumpAction;
+    private InputAction m_DashAction;
+
 
     private float playerHeight, playerWidth;
     // Whether player was on the ground in previous tick;  
@@ -31,6 +48,12 @@ public class PlayerController : MonoBehaviour
     // Timer which counts down after leaving ground, 
     // allowing "coyote-time" jumping  
     private float coyoteTimeCounter = 0f;
+    // Timer which tracks how much longer the dash should last.
+    private float dashTimeCounter = 0f;
+    // Direction of the player when instatiating the dash
+    private Direction dashDirection = Direction.Right;
+
+    private Direction direction;
 
     void Awake()
     {
@@ -45,18 +68,17 @@ public class PlayerController : MonoBehaviour
         
         m_MoveAction = InputSystem.actions.FindAction("Player/Move");
         m_JumpAction = InputSystem.actions.FindAction("Player/Jump");
-        
+        m_DashAction = InputSystem.actions.FindAction("Player/Dash");
         m_MoveAction.Enable();
         m_JumpAction.Enable();
+        m_DashAction.Enable();
+
     }
     
     void Update()
-    {
-        // Handle horizontal movement
-        float moveHorizontal = m_MoveAction.ReadValue<Vector2>().x;
-        rb.linearVelocity = new Vector2(moveHorizontal * moveSpeed, rb.linearVelocity.y);
-        
+    {        
         bool isGrounded = IsGrounded();
+        // Update timers:
         // While coyoteTimeCounter is above zero, jump has been recently pressed;
         // character will jump at the next possible opportunity
         if (coyoteTimeCounter > 0f)
@@ -67,7 +89,11 @@ public class PlayerController : MonoBehaviour
         {
             coyoteTimeCounter = coyoteTime;
         }
-        Debug.Log(coyoteTimeCounter);
+        // dashTimeCounter is positive when dash is occurring
+        if (dashTimeCounter > 0f)
+        {
+            dashTimeCounter -= Time.deltaTime;
+        }
 
         // Show dust particles when the player lands 
         if(!wasGrounded && isGrounded)
@@ -80,6 +106,45 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
         wasGrounded = isGrounded;
+
+        // Freeze gravity when dashing
+        if (dashTimeCounter > 0f)
+        {
+            rb.gravityScale = 0; 
+        } 
+        else
+        {
+            rb.gravityScale = gravityScale; 
+        }
+
+        // Handle horizontal movement
+        if (dashTimeCounter > 0f) 
+        {
+            // Continue dash while dash time counter hasn't yet run out
+            rb.linearVelocity = new Vector2(((int) dashDirection) * dashSpeed, rb.linearVelocity.y);
+        }
+        else 
+        {
+            // Standard movement
+            float moveHorizontal = m_MoveAction.ReadValue<Vector2>().x;
+            if (moveHorizontal > 0f)
+            {
+                direction = Direction.Right;
+            } 
+            else if (moveHorizontal < 0f)
+            {
+                direction = Direction.Left;
+            }
+            rb.linearVelocity = new Vector2(moveHorizontal * moveSpeed, rb.linearVelocity.y);
+
+            // Dashing
+            if (m_DashAction.IsPressed())
+            {
+                Dash();
+            }
+        }
+
+
     }
 
     /// <summary>
@@ -116,8 +181,6 @@ public class PlayerController : MonoBehaviour
             groundCheckDistance // distance
         );
         */
-
-        
         return raycast.collider != null;
     }
 
@@ -130,5 +193,15 @@ public class PlayerController : MonoBehaviour
         coyoteTimeCounter = 0f; 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         dustParticleSystem.Play();
+    }
+
+    /// <summary>
+    /// Make the player dash.
+    /// </summary>
+    void Dash()
+    {
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+        dashDirection = direction;
+        dashTimeCounter = dashTime;
     }
 }

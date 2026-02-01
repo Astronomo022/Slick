@@ -182,8 +182,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   moveSpeed: 10
   jumpForce: 15
+  gravityScale: 3
   groundCheckDistance: 0.1
   coyoteTime: 0.1
+  dashSpeed: 10
+  dashTime: 0.25
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
