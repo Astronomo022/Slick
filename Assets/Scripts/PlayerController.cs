@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float gravityScale = 3f;
     [SerializeField] private float groundCheckDistance = 0.1f;
-    //public float groundCheckBoxWidth = 1.5f;
+    public float groundCheckBoxWidth = 0.99f;
     [SerializeField] private float coyoteTime = 0.2f;
 
     [Header("Dashing")]
@@ -45,7 +45,8 @@ public class PlayerController : MonoBehaviour
     // used to figure out when to make dust particles
     private Direction direction;
     private bool wasGrounded = false;
-    //private Vector2 groundCheckBoxSize;
+    // Width of the area under the player to check for grounded-ness
+    private Vector2 groundCheckBoxSize;
     // Timer which counts down after leaving ground, 
     // allowing "coyote-time" jumping  
     private float coyoteTimeCounter = 0f;
@@ -63,11 +64,12 @@ public class PlayerController : MonoBehaviour
 
         playerHeight = bc.size.y;
         playerWidth = bc.size.x;
-        /*groundCheckBoxSize = new Vector2(
-            groundCheckBoxWidth, groundCheckDistance
-        );*/
         numDashesLeft = numDashes;
         
+        groundCheckBoxSize = new Vector2(
+            groundCheckBoxWidth, groundCheckDistance
+        );
+
         m_MoveAction = InputSystem.actions.FindAction("Player/Move");
         m_JumpAction = InputSystem.actions.FindAction("Player/Jump");
         m_DashAction = InputSystem.actions.FindAction("Player/Dash");
@@ -107,6 +109,7 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
         wasGrounded = isGrounded;
+        // Reset dash
         if (isGrounded)
         {
             numDashesLeft = numDashes;
@@ -149,11 +152,12 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     bool IsGrounded()
     {
-        //Debug.DrawRay(transform.position, Vector2.down * (playerHeight / 2 + groundCheckDistance), Color.green);
+        /*
+        Debug.DrawRay(transform.position, Vector2.down * (playerHeight / 2 + groundCheckDistance), Color.green);
         RaycastHit2D raycast = Physics2D.Raycast(
             transform.position, Vector2.down, playerHeight / 2 + groundCheckDistance, groundLayer);
+        */
         
-        /*
         RaycastHit2D raycast = Physics2D.BoxCast(
             new Vector2(
                 transform.position.x,
@@ -177,7 +181,7 @@ public class PlayerController : MonoBehaviour
             Vector2.down,       // direction
             groundCheckDistance // distance
         );
-        */
+        
         return raycast.collider != null;
     }
 
