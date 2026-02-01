@@ -110,7 +110,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 6200000, guid: 3cb429eb15068df47b412a15735c7a01, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -180,8 +180,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8831da499a90504d90857b0d4c42e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  moveSpeed: 5
-  jumpForce: 5
+  moveSpeed: 10
+  jumpForce: 15
+  groundCheckDistance: 0.1
+  coyoteTime: 0.1
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -1166,7 +1168,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 30
+        scalar: 3
         minScalar: 30
         maxCurve:
           serializedVersion: 2
