@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private BoxCollider2D bc;
+    private TrailRenderer tr;
 
     private InputAction m_MoveAction;
     private InputAction m_JumpAction;
@@ -100,6 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
+        tr = GetComponent<TrailRenderer>();
 
         playerHeight = bc.size.y;
         playerWidth = bc.size.x;
@@ -253,6 +255,7 @@ public class PlayerController : MonoBehaviour
         if (numDashesLeft > 0)
         {
             rb.gravityScale = 0f; 
+            tr.emitting = true;
 
             // Make player dash in the currently-facing direction
             dashDirection = direction;
@@ -268,6 +271,7 @@ public class PlayerController : MonoBehaviour
     {
         // Un-freeze gravity after dashing
         rb.gravityScale = gravityScale;
+        tr.emitting = false;
     }
 
     void ResetDash()
