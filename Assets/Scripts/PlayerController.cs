@@ -100,6 +100,8 @@ public class PlayerController : MonoBehaviour
     private float canTwirlTimeCounter = 0f;
     // Timer which tracks if jump is queued up.
     private float jumpBufferTimeCounter = 0f;
+    // Assuming this is player input -Z
+    private float moveHorizontal; 
 
     // Direction of the player when instatiating the dash
     private Direction dashDirection = Direction.Right;
@@ -301,5 +303,18 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, twirlSpeed);
         canTwirlTimeCounter = 0f;
         twirlParticleSystem.Play();
+    }
+
+    public void Animate()
+    {
+       /* bool isMoving;
+        // This nest is checking if you're moving or not. 
+        if(moveHorizontal > 0.1f || moveHorizontal < -0.1f)
+            isMoving = true;
+        else
+        {
+            isMoving = false;
+        }
+        */ // Commented out for now to avoid unnecessary warnings.
     }
 }
