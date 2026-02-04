@@ -60,7 +60,9 @@ public class PlayerController : MonoBehaviour
     /// How far below the player a platform can be while it's counted as standing on ground. 
     /// </summary>
     [SerializeField] private float groundCheckBoxHeight = 0.1f;
-    [SerializeField] private float groundCheckBoxWidth = 1f;
+    //[SerializeField] private float groundCheckBoxWidth = 1f;
+    private float groundCheckBoxWidth;
+
 
     /// <summary>
     /// How far in front of the player a wall can be while it's counted as facing a wall. 
@@ -117,6 +119,8 @@ public class PlayerController : MonoBehaviour
 
         numDashesLeft = numDashes;
         
+        groundCheckBoxWidth = playerWidth;
+
         m_MoveAction = InputSystem.actions.FindAction("Player/Move");
         m_JumpAction = InputSystem.actions.FindAction("Player/Jump");
         m_DashAction = InputSystem.actions.FindAction("Player/Dash");

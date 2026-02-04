@@ -194,7 +194,7 @@ MonoBehaviour:
   twirlSpeed: 15
   canTwirlTime: 0.35
   groundCheckBoxHeight: 0.1
-  groundCheckBoxWidth: 1
+  groundCheckBoxWidth: 0.9166667
   wallCheckDistance: 0.1
   groundLayer:
     serializedVersion: 2
