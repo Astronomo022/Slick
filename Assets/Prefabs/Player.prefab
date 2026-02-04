@@ -87,7 +87,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: 354508243960088721, guid: 42a983ffb4ccbda4692791964c15b699, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -162,13 +162,13 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 2}
+    oldSize: {x: 0.9166667, y: 1}
     newSize: {x: 1, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.9166667, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &1912790772784492405
 MonoBehaviour:
@@ -186,6 +186,7 @@ MonoBehaviour:
   jumpForce: 15
   gravityScale: 3
   coyoteTime: 0.1
+  jumpBufferTime: 0.2
   numDashes: 1
   dashSpeed: 20
   dashTime: 0.25
@@ -259,7 +260,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.7523804
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1290,7 +1291,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 3
+        scalar: 10
         minScalar: 30
         maxCurve:
           serializedVersion: 2
