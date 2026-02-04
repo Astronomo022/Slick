@@ -32,6 +32,11 @@ public class PlayerController : MonoBehaviour
     /// How many seconds after leaving a platform the player is still allowed to jump. 
     /// </summary>
     [SerializeField] private float coyoteTime = 0.2f;
+    /// <summary>
+    /// How many seconds after pressing jump button a jump can occur on landing. 
+    /// </summary>
+    [SerializeField] private float jumpBufferTime = 0.2f;
+    
 
     [Header("Dashing")]
     [SerializeField] private int numDashes = 1; 
@@ -83,7 +88,7 @@ public class PlayerController : MonoBehaviour
     private float playerHeight, playerWidth;
     // Whether player was on the ground in previous tick;  
     // used to figure out when to make dust particles
-    private Direction direction;
+    private Direction direction = Direction.Right;
     private bool wasGrounded = false;
     
     // Timer which counts down after leaving ground, 
@@ -93,6 +98,8 @@ public class PlayerController : MonoBehaviour
     private float dashTimeCounter = 0f;
     // Timer which tracks if the player can twirl.
     private float canTwirlTimeCounter = 0f;
+    // Timer which tracks if jump is queued up.
+    private float jumpBufferTimeCounter = 0f;
 
     // Direction of the player when instatiating the dash
     private Direction dashDirection = Direction.Right;
@@ -129,6 +136,9 @@ public class PlayerController : MonoBehaviour
             coyoteTimeCounter = coyoteTime;
         else if (coyoteTimeCounter > 0f)
             coyoteTimeCounter -= Time.deltaTime;
+        // jumpBufferTimeCounter is positive when jump is queued
+        if (jumpBufferTimeCounter > 0f)
+            jumpBufferTimeCounter -= Time.deltaTime;
         // dashTimeCounter is positive when dash is occurring
         if (dashTimeCounter > 0f)
             dashTimeCounter -= Time.deltaTime;
@@ -162,8 +172,12 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector2(moveHorizontal * moveSpeed, rb.linearVelocity.y);
         }
 
+        // if (m_JumpAction.IsPressed()) // this doesn't play well with the twirl + jump buffer
+        if (m_JumpAction.WasPressedThisFrame())
+            jumpBufferTimeCounter = jumpBufferTime;
+
         // Handle jumping / twirling
-        if (m_JumpAction.IsPressed())
+        if (jumpBufferTimeCounter > 0f)
         {
             if (coyoteTimeCounter > 0f)
                 Jump();
@@ -242,8 +256,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Jump()
     {
-        // Reset coyote time immediately to prevent another jump
+        // Reset coyote time & jump buffer immediately to prevent another jump
         coyoteTimeCounter = 0f; 
+        jumpBufferTimeCounter = 0f;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         dustParticleSystem.Play();
     }
