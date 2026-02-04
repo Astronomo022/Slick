@@ -68,6 +68,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     // Which particles to play on jump or landing
     [SerializeField] private ParticleSystem dustParticleSystem;
+    [SerializeField] private ParticleSystem twirlParticleSystem;
+
 
     private Rigidbody2D rb;
     private BoxCollider2D bc;
@@ -283,5 +285,6 @@ public class PlayerController : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, twirlSpeed);
         canTwirlTimeCounter = 0f;
+        twirlParticleSystem.Play();
     }
 }
