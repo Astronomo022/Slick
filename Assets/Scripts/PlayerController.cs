@@ -319,7 +319,6 @@ public class PlayerController : MonoBehaviour
 
     void EndDash()
     {
-        Debug.Log("End dash");
         // Un-freeze gravity after dashing
         rb.gravityScale = gravityScale;
         animator.SetBool("dashing", false);
