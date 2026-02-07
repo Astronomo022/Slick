@@ -77,6 +77,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ParticleSystem dustParticleSystem;
     [SerializeField] private ParticleSystem twirlParticleSystem;
 
+    public CollisionCombat cc; // CollisionCombat object field
+
 
     private Rigidbody2D rb;
     private BoxCollider2D bc;
@@ -92,6 +94,7 @@ public class PlayerController : MonoBehaviour
     // used to figure out when to make dust particles
     private Direction direction = Direction.Right;
     private bool wasGrounded = false;
+    bool dashCheck; 
     
     // Timer which counts down after leaving ground, 
     // allowing "coyote-time" jumping  
@@ -309,6 +312,29 @@ public class PlayerController : MonoBehaviour
         twirlParticleSystem.Play();
     }
 
+    // This function needs 2 separate condition statements, since the Boss AI has it's own script apart from Enemy's
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        EntStats temp;
+        CollisionCombat cs; // CollisionCombat object within this script
+        //  on collision enter, the player should do damage to an enemy based on whether it's dashing or not
+        if (col.gameObject.tag == "Enemy" ) // detecting collision as an enemy.
+        {
+            temp = col.gameObject.GetComponent<EntStats>(); // intending to pass as an argument to the function below
+            cs = cc.gameObject.GetComponent<CollisionCombat>(); // Doing this to initialize cs as the script
+            cs.CollisionReaction(this.gameObject, temp, dashCheck);// Player, Boss, Dash Check
+            
+        }
+         if (col.gameObject.tag == "Boss" ) // detecting collision as a boss.
+        {
+            temp = col.gameObject.GetComponent<EntStats>(); 
+            cs = cc.gameObject.GetComponent<CollisionCombat>(); 
+            cs.CollisionBoss(this.gameObject, temp, dashCheck); // Player, Boss, Dash Check
+            
+        }
+
+
+    }
     public void Animate()
     {
        /* bool isMoving;
@@ -320,5 +346,11 @@ public class PlayerController : MonoBehaviour
             isMoving = false;
         }
         */ // Commented out for now to avoid unnecessary warnings.
+    }
+
+    public void StopInput()
+    {
+        this.moveSpeed = 0; // Stops "this" object's move speed and not the others.
+        // May need to add more here to stop jumping and dashing as well, but for now this is all we have. 
     }
 }

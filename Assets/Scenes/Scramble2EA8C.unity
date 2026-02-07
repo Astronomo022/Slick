@@ -270,7 +270,7 @@ GameObject:
   - component: {fileID: 240883715}
   - component: {fileID: 240883714}
   - component: {fileID: 240883713}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17171,7 +17171,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3305015722682681337, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
       propertyPath: m_GravityScale
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6210314823703483321, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
       propertyPath: m_Controller
@@ -17228,8 +17228,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 681906969796359551, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1065117774}
+    - targetCorrespondingSourceObject: {fileID: 7193882268455314871, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1692836117}
   m_SourcePrefab: {fileID: 100100000, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
+--- !u!1 &1065117768 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 681906969796359551, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
+  m_PrefabInstance: {fileID: 533957013}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1065117773 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6250795383902500437, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
+  m_PrefabInstance: {fileID: 533957013}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1065117774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065117768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 052e89904a1c11c458abe51e677b8a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossAI
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  groundCheckBoxWidth: 0
+  groundCheckBoxHeight: 0
+  player: {fileID: 1065117773}
+  chaseSpeed: 0
 --- !u!1001 &1474465019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17360,6 +17395,23 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
+--- !u!1 &1692836115 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7193882268455314871, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
+  m_PrefabInstance: {fileID: 533957013}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1692836117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692836115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a34641bbc9b56dc48b31131ab9313e1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimEventsManager
 --- !u!1001 &1775680404
 PrefabInstance:
   m_ObjectHideFlags: 0

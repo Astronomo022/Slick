@@ -22,7 +22,8 @@ public class BossAI : MonoBehaviour
     //float elevation; // may not be needed in this project, but here just in case. 
 
     bool detection; // whether the enemy has detected the player or not.
-    bool isGrounded, isWeak ;
+    bool isGrounded;
+    private bool isWeak;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -115,7 +116,7 @@ public class BossAI : MonoBehaviour
         // Placeholder for future animation code
         bool isMoving;
         // This nest is checking if you're moving or not. 
-        if(direction > 0.1f || direction < -0.1f)
+        if(direction > 0.1f || direction < -0.1f) 
             isMoving = true;
         else
         {
@@ -125,6 +126,8 @@ public class BossAI : MonoBehaviour
             anim.SetBool("isFalling", false); 
         
         anim.SetBool("isMoving", isMoving);
+        anim.SetBool("IsGrounded", isGrounded);
+        anim.SetFloat("X",direction);
         anim.SetBool("isWeak", isWeak);
     }
 
@@ -134,13 +137,19 @@ public class BossAI : MonoBehaviour
         if(col.gameObject.tag == "Player")
         {
             detection = true;
-        }
+
+        } 
     }
+    
     public void StopInput()
     {
         this.chaseSpeed = 0; // Stops "this" object's chase speed and not the others.
         detection = false; // Stops chasing the player.
 
+    }
+    public bool GetIsWeak()
+    {
+        return this.isWeak;
     }
 
 }
