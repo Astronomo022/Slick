@@ -96,7 +96,6 @@ public class PlayerController : MonoBehaviour
     // used to figure out when to make dust particles
     private Direction direction = Direction.Right;
     private bool wasGrounded = false;
-    bool dashCheck; 
     
     // Timer which counts down after leaving ground, 
     // allowing "coyote-time" jumping  
@@ -346,20 +345,19 @@ public class PlayerController : MonoBehaviour
     {
         EntStats temp;
         CollisionCombat cs; // CollisionCombat object within this script
+        bool isDashing = dashTimeCounter > 0f;
         //  on collision enter, the player should do damage to an enemy based on whether it's dashing or not
-        if (col.gameObject.tag == "Enemy" ) // detecting collision as an enemy.
+        if (col.gameObject.tag == "Enemy") // detecting collision as an enemy.
         {
             temp = col.gameObject.GetComponent<EntStats>(); // intending to pass as an argument to the function below
             cs = cc.gameObject.GetComponent<CollisionCombat>(); // Doing this to initialize cs as the script
-            cs.CollisionReaction(this.gameObject, temp, dashCheck);// Player, Boss, Dash Check
-            
+            cs.CollisionEnemy(this.gameObject, temp, isDashing);// Player, Boss, Dash Check
         }
-         if (col.gameObject.tag == "Boss" ) // detecting collision as a boss.
+        if (col.gameObject.tag == "Boss") // detecting collision as a boss.
         {
             temp = col.gameObject.GetComponent<EntStats>(); 
             cs = cc.gameObject.GetComponent<CollisionCombat>(); 
-            cs.CollisionBoss(this.gameObject, temp, dashCheck); // Player, Boss, Dash Check
-            
+            cs.CollisionBoss(this.gameObject, temp, isDashing); // Player, Boss, Dash Check
         }
 
 
