@@ -1297,7 +1297,7 @@ TilemapRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0.03333336, y: 0.03333336, z: 0}
+  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -4913,6 +4913,14 @@ PrefabInstance:
     - target: {fileID: 681906969796359551, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2945476117010546648, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 494e2edd71c16ba449f813f67546e482, type: 2}
+    - target: {fileID: 2945476117010546648, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6250795383902500437, guid: 39a414462cd58fe46a268a7d5413fe5f, type: 3}
       propertyPath: m_LocalPosition.x

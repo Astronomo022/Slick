@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private BoxCollider2D bc;
     private TrailRenderer tr;
+    private Animator animator;
 
     private InputAction m_MoveAction;
     private InputAction m_JumpAction;
@@ -115,6 +116,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
         tr = GetComponent<TrailRenderer>();
+        animator = this.gameObject.transform.GetChild(0).GetComponent<Animator>();
 
         playerHeight = bc.size.y;
         playerWidth = bc.size.x;
@@ -138,16 +140,25 @@ public class PlayerController : MonoBehaviour
         // Update timers:
         // While coyoteTimeCounter is positive, the player can jump
         // Timer is reset when player is on ground
-        if (isGrounded)
+        if (isGrounded) 
+        {
             coyoteTimeCounter = coyoteTime;
+        }
         else if (coyoteTimeCounter > 0f)
+        {
             coyoteTimeCounter -= Time.deltaTime;
+        }
         // jumpBufferTimeCounter is positive when jump is queued
         if (jumpBufferTimeCounter > 0f)
             jumpBufferTimeCounter -= Time.deltaTime;
         // dashTimeCounter is positive when dash is occurring
         if (dashTimeCounter > 0f)
+        {
             dashTimeCounter -= Time.deltaTime;
+            // un-freeze gravity when dashing
+            if (dashTimeCounter <= 0f)
+                EndDash();
+        }
         if (canTwirlTimeCounter > 0f)
             canTwirlTimeCounter -= Time.deltaTime;
 
@@ -160,9 +171,7 @@ public class PlayerController : MonoBehaviour
         
         wasGrounded = isGrounded;
 
-        // un-freeze gravity when dashing
-        if (dashTimeCounter <= 0f)
-            EndDash();
+
 
         // Handle horizontal movement
         if (dashTimeCounter <= 0f) 
@@ -188,7 +197,7 @@ public class PlayerController : MonoBehaviour
             if (coyoteTimeCounter > 0f)
                 Jump();
             else if (canTwirlTimeCounter > 0f)
-                Twirl();
+                StartTwirl();
         }
 
         // Handle dashing (/ twirling?)
@@ -197,8 +206,18 @@ public class PlayerController : MonoBehaviour
             if (numDashesLeft > 0)
                 StartDash();
             else if (canTwirlTimeCounter > 0f)
-                Twirl();
+                StartTwirl();
         }
+
+        // You're not jumping if you're falling
+        if (rb.linearVelocity.y < 0f)
+            animator.SetBool("jumping", false);
+
+
+        // Update always-set animator variables
+        animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocity.x)); // should be named xSpeed technically but whatever
+        animator.SetFloat("yVelocity", rb.linearVelocity.y);
+
 
     }
 
@@ -266,6 +285,7 @@ public class PlayerController : MonoBehaviour
         coyoteTimeCounter = 0f; 
         jumpBufferTimeCounter = 0f;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        animator.SetBool("jumping", true);
         dustParticleSystem.Play();
     }
 
@@ -286,14 +306,18 @@ public class PlayerController : MonoBehaviour
 
             canTwirlTimeCounter = canTwirlTime;
             dashTimeCounter = dashTime;
+            animator.SetBool("dashing", true);
             numDashesLeft -= 1;
         }
     }
 
     void EndDash()
     {
+        Debug.Log("End dash");
         // Un-freeze gravity after dashing
         rb.gravityScale = gravityScale;
+        animator.SetBool("dashing", false);
+        dashTimeCounter = 0f;
         tr.emitting = false;
     }
 
@@ -302,11 +326,14 @@ public class PlayerController : MonoBehaviour
         numDashesLeft = numDashes;
     }
 
-    void Twirl()
+    void StartTwirl()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, twirlSpeed);
         canTwirlTimeCounter = 0f;
+        animator.SetBool("twirling", true);
         twirlParticleSystem.Play();
+        animator.SetBool("twirling", false);
+
     }
 
     public void Animate()
