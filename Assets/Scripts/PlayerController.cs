@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
     private BoxCollider2D bc;
     private TrailRenderer tr;
     private Animator animator;
+    private SpriteRenderer spriteRenderer;
 
     private InputAction m_MoveAction;
     private InputAction m_JumpAction;
@@ -120,6 +121,7 @@ public class PlayerController : MonoBehaviour
         bc = GetComponent<BoxCollider2D>();
         tr = GetComponent<TrailRenderer>();
         animator = this.gameObject.transform.GetChild(0).GetComponent<Animator>();
+        spriteRenderer = this.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>();
 
         playerHeight = bc.size.y;
         playerWidth = bc.size.x;
@@ -174,8 +176,6 @@ public class PlayerController : MonoBehaviour
         
         wasGrounded = isGrounded;
 
-
-
         // Handle horizontal movement
         if (dashTimeCounter <= 0f) 
         {
@@ -216,11 +216,14 @@ public class PlayerController : MonoBehaviour
         if (rb.linearVelocity.y < 0f)
             animator.SetBool("jumping", false);
 
-
         // Update always-set animator variables
+        animator.SetBool("grounded", isGrounded);
         animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocity.x)); // should be named xSpeed technically but whatever
         animator.SetFloat("yVelocity", rb.linearVelocity.y);
 
+        // Display sprite in correct direction
+        bool flipSprite = (dashTimeCounter > 0f) ? (dashDirection == Direction.Left) : (direction == Direction.Left);
+        spriteRenderer.flipX = flipSprite;
 
     }
 
@@ -300,7 +303,6 @@ public class PlayerController : MonoBehaviour
         // This shouldn't be a necessary condition, but just in case...
         if (numDashesLeft > 0)
         {
-            rb.gravityScale = 0f; 
             tr.emitting = true;
 
             // Make player dash in the currently-facing direction
@@ -310,6 +312,7 @@ public class PlayerController : MonoBehaviour
             canTwirlTimeCounter = canTwirlTime;
             dashTimeCounter = dashTime;
             animator.SetBool("dashing", true);
+            rb.gravityScale = 0f; 
             numDashesLeft -= 1;
         }
     }
