@@ -11,13 +11,15 @@ public class AnimEventsManager : MonoBehaviour
     void SendToFalling()
     {
         this.gameObject.GetComponent<Animator>().SetBool("isFalling", true);
+        boss = this.gameObject.GetComponentInParent<BossAI>();
+        //boss.StartFalling(); // calls the function in the boss script to make the boss fall.
     }
 
     void SendToSpotLoop()
     {
         // triggered from the "Crash" animation. Sends the boss to "Spotloop" state.
-        boss = this.gameObject.GetComponentInParent<BossAI>(); 
-        // Don't forget to finish the rest of this 
+        // boss = this.gameObject.GetComponentInParent<BossAI>(); 
+        this.gameObject.GetComponent<Animator>().SetBool("isOpen", true);
         
         
     } 
