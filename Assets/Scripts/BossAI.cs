@@ -172,7 +172,7 @@ public class BossAI : MonoBehaviour
 
     public IEnumerator StartFalling()
     {
-        anim.SetFloat("X", rb.linearVelocity.x); // Resets the X parameter to 0, 
+        //anim.SetFloat("X", rb.linearVelocity.x); // Resets the X parameter to 0, 
         rb.gravityScale = 1 * fallSpeed; // starts the boss falling by enabling gravity.
         yield return new WaitForSeconds(1.2f); // Wait for a short time to allow falling animation to play
         rb.gravityScale = 0; // Reset gravity scale after falling animation is complete
