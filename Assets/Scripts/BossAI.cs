@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using System.Collections;
+using System;
 // This class is basically a copy of EnemyAI and then some. 
 // Also copies from PlayerController for stuff like isGrounded
 
@@ -16,18 +17,20 @@ public class BossAI : MonoBehaviour
     // TODO: canDash boolean for when we want smarter AI behavior, to dash into us, if we can work it in
     
     // primitive data types 
-    public float chaseSpeed; // as always... Self explanatory. 
+    public float chaseSpeed, fallSpeed,riseSpeed; // as always... Self explanatory. 
     private float bossHeight, bossWidth;
     float direction;
     //float elevation; // may not be needed in this project, but here just in case. 
 
     bool detection; // whether the enemy has detected the player or not.
-    bool isGrounded;
-    private bool isWeak;
+    public bool isGrounded, isFalling, isOpen;
+    private bool isWeak,isUnder,isAttacking,isClosing,resetIdle;
+    public BoxCollider2D roomTrigger,attackTrigger; 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
+        anim = GetComponentInChildren<Animator>();
         //tr = GetComponent<TrailRenderer>();
 
         bossHeight = bc.size.y;
@@ -37,6 +40,8 @@ public class BossAI : MonoBehaviour
     {
         isGrounded = IsGrounded();
         isWeak = false;
+        isAttacking = false;
+        isClosing = false;
     }
 
     // Update is called once per frame
@@ -56,11 +61,16 @@ public class BossAI : MonoBehaviour
                 detection = false;
                 return;
             }
-        // Mathf.Sign may not need to be here, we can remove if need be. 
-        direction = Mathf.Sign(player.position.x - transform.position.x);
+        if(!isAttacking && !isClosing) // Doesn't allow movement unless the flags isAttacking and isClosing are false
+            {
+            // Mathf.Sign may not need to be here, we can remove if need be. 
+            direction = Mathf.Sign(player.position.x - transform.position.x);
+            
 
-        // should move the rb in the direction of the player. Needs to be tested. 
-        rb.linearVelocity = new Vector2(direction * chaseSpeed, rb.linearVelocity.y); 
+
+            // should move the rb in the direction of the player. Needs to be tested. 
+            rb.linearVelocity = new Vector2(direction * chaseSpeed, rb.linearVelocity.y); 
+            }
         }
     }
 
@@ -123,22 +133,72 @@ public class BossAI : MonoBehaviour
             isMoving = false;
         }
         if(isGrounded)
-            anim.SetBool("isFalling", false); 
-        
-        anim.SetBool("isMoving", isMoving);
+        {
+            isUnder = false;
+            isFalling = false;
+            anim.SetBool("IsFalling", isFalling); 
+        }
+
+        // All the parameters for this animation that are usually set, make sure all of them are here. 
+        anim.SetBool("IsOpen", isOpen);
+        anim.SetBool("IsFalling", isFalling);
+        anim.SetBool("IsMoving", isMoving);
         anim.SetBool("IsGrounded", isGrounded);
+        anim.SetBool("IsClosing", isClosing);
         anim.SetFloat("X",direction);
-        anim.SetBool("isWeak", isWeak);
+        anim.SetBool("IsUnder",isUnder);
+        anim.SetBool("IsWeak", isWeak);
+        anim.SetBool("ResetIdle", resetIdle);
     }
 
     // This function automatically runs if a gameobject's tag is named with "Player"
     void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.gameObject.tag == "Player")
+        if(col.gameObject.tag == "Player" && col.IsTouching(roomTrigger) && !isAttacking)
         {
             detection = true;
+            Debug.Log("Player Detected");
 
         } 
+
+        if(col.gameObject.tag == "Player" && col.IsTouching(attackTrigger))
+        {
+            isAttacking = true;
+            isUnder = true;
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            detection = false;
+        }
+    }
+
+    public IEnumerator StartFalling()
+    {
+        anim.SetFloat("X", rb.linearVelocity.x); // Resets the X parameter to 0, 
+        rb.gravityScale = 1 * fallSpeed; // starts the boss falling by enabling gravity.
+        yield return new WaitForSeconds(1.2f); // Wait for a short time to allow falling animation to play
+        rb.gravityScale = 0; // Reset gravity scale after falling animation is complete
+    }
+
+    public IEnumerator StartWeakTimer()
+    {
+        isWeak = true;
+        //Debug.Log("Weak timer started");
+        yield return new WaitForSeconds(3f); // Boss is weak for 3 seconds, may need to adjust.
+       // Debug.Log("Weak timer ended");
+        isWeak = false;
+        isAttacking = false; // Resets the attack after the weak timer runs out.
+        isClosing = true; 
+    }
+
+    public IEnumerator StartRising()
+    {
+        isClosing = true;
+        resetIdle = true;
+        rb.gravityScale = -0.3f * riseSpeed; // starts the boss rising by enabling gravity.
+        yield return new WaitForSeconds(2.2f); // Wait for a short time to allow falling animation to play
+        rb.gravityScale = 0; // Reset gravity scale after falling animation is complete
+        resetIdle = false;
+        isClosing = false;
+
     }
     
     public void StopInput()

@@ -10,16 +10,26 @@ public class AnimEventsManager : MonoBehaviour
     #region BOSS
     void SendToFalling()
     {
-        this.gameObject.GetComponent<Animator>().SetBool("isFalling", true);
+        bool temp = true;
+        //Debug.Log(this.gameObject.name+ " and " + this.gameObject.tag);
         boss = this.gameObject.GetComponentInParent<BossAI>();
+        boss.isFalling = temp; // Probably not a good solution
+
+        // Reasoning the above didn't work at first: Because I didn't put brackets around an if statement.
+
+        StartCoroutine(boss.StartFalling()); // calls the function in the boss script to make the boss fall.
+        StopCoroutine(boss.StartFalling());
         //boss.StartFalling(); // calls the function in the boss script to make the boss fall.
     }
 
     void SendToSpotLoop()
     {
         // triggered from the "Crash" animation. Sends the boss to "Spotloop" state.
-        // boss = this.gameObject.GetComponentInParent<BossAI>(); 
-        this.gameObject.GetComponent<Animator>().SetBool("isOpen", true);
+        boss = this.gameObject.GetComponentInParent<BossAI>(); 
+        boss.isOpen = true;
+        StartCoroutine(boss.StartWeakTimer());
+        StopCoroutine(boss.StartWeakTimer());
+        
         
         
     } 
@@ -27,8 +37,10 @@ public class AnimEventsManager : MonoBehaviour
     void ResetToIdle()
     {
         // triggered from the "Close" animation. Resets the boss to idle, and resets the cycle. 
-        this.gameObject.GetComponent<Animator>().SetTrigger("Idle_1");
+        //this.gameObject.GetComponent<Animator>().SetTrigger("Idle_1");
         boss = this.gameObject.GetComponentInParent<BossAI>(); 
+        StartCoroutine(boss.StartRising()); // calls the function in the boss script to make the boss rise back up.
+        StopCoroutine(boss.StartRising());
         // TODO: boss.SomeMethodToRaiseTheObjectBackUp();
     }
     #endregion
