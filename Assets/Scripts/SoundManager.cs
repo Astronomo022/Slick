@@ -58,6 +58,20 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void PlayMusic(string musicFileName)
+    {
+        AudioClip clip = Resources.Load<AudioClip>($"Sounds/Music/{musicFileName}");
+        if (clip != null && musicAudio != null)
+        {
+            musicAudio.clip = clip;
+            musicAudio.Play();
+        }
+        else
+        {
+            Debug.LogWarning($"Music '{musicFileName}' not found or AudioSource not available.");
+        }
+    }
+
     /*
     public void PlaySoundEffect(string fileName)
     {
