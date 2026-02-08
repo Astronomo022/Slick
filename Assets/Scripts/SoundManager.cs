@@ -78,6 +78,7 @@ public class SoundManager : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
+            Debug.Log("Player entered music trigger");
             PlayMusic();
         }
     }
