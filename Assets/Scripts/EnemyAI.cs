@@ -73,7 +73,7 @@ public class EnemyAI : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col)
     {
         Debug.Log("Enemy trigger with object " + col.gameObject.tag + ", name " + col.gameObject.name);
-        if(col.gameObject.name == "Player")
+        if(col.gameObject.name == player.gameObject.name)
         {
             detection = true;
         }
