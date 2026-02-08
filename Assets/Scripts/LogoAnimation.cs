@@ -9,7 +9,7 @@ public class LogoAnimation : MonoBehaviour
         StartCoroutine(SlideInFromLeft());
     }
 
-    IEnumerator SlideInFromLeft()
+    public IEnumerator SlideInFromLeft()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
         Vector2 startPos = new Vector2(-Screen.width, rectTransform.anchoredPosition.y);
@@ -32,7 +32,7 @@ public class LogoAnimation : MonoBehaviour
 
     }
 
-    IEnumerator SlideOutToLeft()
+    public IEnumerator SlideOutToLeft()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
         Vector2 startPos = rectTransform.anchoredPosition;

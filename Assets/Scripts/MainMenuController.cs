@@ -44,25 +44,21 @@ public class MainMenuController : MonoBehaviour
         GameObject logo = GameObject.Find("Logo");
         GameObject continueText = GameObject.Find("ContinueText");
 
+        // Start the slide-out animation for the logo
+        /*
         if (logo != null)
         {
-            // Perform actions on the logo, e.g., enable or change color
             logo.GetComponent<LogoAnimation>().StartCoroutine("SlideOutToLeft");
         }
 
         if (continueText != null)
         {
-            // Perform actions on the continue text, e.g., enable or change color
             //continueText.SetActive(true);
         }
+        */
 
-        // Load the "Scramble" scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Scramble");
-    }
+        yield return StartCoroutine(logo.GetComponent<LogoAnimation>().SlideOutToLeft());
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        UnityEngine.SceneManagement.SceneManager.LoadScene("FirstLevel");
     }
 }
