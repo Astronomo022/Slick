@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class EntStats : MonoBehaviour
 {
@@ -50,11 +51,29 @@ public class EntStats : MonoBehaviour
         if(this.gameObject.tag == "Enemy" || this.gameObject.tag == "Boss")
         {
             //sfx.PlayEnemyDeath(); // commmented since we dont have an SFX manager yet, just to remove the errors
-            anim.SetTrigger("Hurt");
-            yield return new WaitForSecondsRealtime(0.5f); // may need to wait longer
+            //anim.SetTrigger("Hurt");
+            SoundManager.instance.PlaySoundEffect("boss_falling");
+            anim.SetBool("IsHurt", true);
+            //yield return new WaitForSecondsRealtime(0.5f); // may need to wait longer
+        
+            yield return new WaitForSecondsRealtime(1f); // may need to wait longer or replace with NULL
+            anim.SetTrigger("Explode");
+            SoundManager.instance.PlaySoundEffect("enemy_killed");
+            yield return new WaitForSecondsRealtime(0.3f); // may need to wait longer or replace with NULL
+            SoundManager.instance.PlaySoundEffect("enemy_killed");
+            yield return new WaitForSecondsRealtime(0.3f); // may need to wait longer or replace with NULL
+            SoundManager.instance.PlaySoundEffect("enemy_killed");
+            yield return new WaitForSecondsRealtime(0.1f); // may need to wait longer
+            Destroy(this.gameObject); // Calls this function to delete the object after yield return. 
+        } else  if (this.gameObject.tag == "Player") {
+            GetComponentInChildren<SpriteRenderer>().color = Color.red;
+            yield return new WaitForSecondsRealtime(0.5f);
+            SceneManager.LoadScene("FirstLevel");
+            //yield return new WaitForSecondsRealtime(0.1f); // may need to wait longer
+            //Destroy(this.gameObject); // Calls this function to delete the object after yield return. 
+
         }
-        yield return new WaitForSecondsRealtime(1.3f); // may need to wait longer or replace with NULL
-        Destroy(this.gameObject); // Calls this function to delete the object after yield return. 
+        
     }
 
     public void Heal(int regenRate)

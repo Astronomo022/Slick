@@ -71,6 +71,8 @@ public class CollisionCombat : MonoBehaviour
         EntStats playerEntityStats = player.GetComponent<EntStats>();
         EntStats bossEntityStats = boss.GetComponent<EntStats>();
 
+        Debug.Log(pc + " " + bai + " " + playerEntityStats + " " + bossEntityStats);
+
         if (dash)
         {
             if (bai.GetIsWeak())
@@ -81,7 +83,6 @@ public class CollisionCombat : MonoBehaviour
                     bai.StopInput();
                     StartCoroutine(bossEntityStats.DeathAnim()); // wait for a few seconds for the fiery explode to finish
                     StopCoroutine(bossEntityStats.DeathAnim());
-
                 }
                 else
                 {

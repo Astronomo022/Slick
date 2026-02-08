@@ -89,6 +89,7 @@ public class PlayerController : MonoBehaviour
     private InputAction m_MoveAction;
     private InputAction m_JumpAction;
     private InputAction m_DashAction;
+    private InputAction m_DebugAction;
 
 
     private float playerHeight, playerWidth;
@@ -132,9 +133,12 @@ public class PlayerController : MonoBehaviour
         m_MoveAction = InputSystem.actions.FindAction("Player/Move");
         m_JumpAction = InputSystem.actions.FindAction("Player/Jump");
         m_DashAction = InputSystem.actions.FindAction("Player/Dash");
+        m_DebugAction = InputSystem.actions.FindAction("Player/Debug");
+
         m_MoveAction.Enable();
         m_JumpAction.Enable();
         m_DashAction.Enable();
+        m_DebugAction.Enable();
 
         cc  = GameObject.Find("CollisionSystem").GetComponent<CollisionCombat>(); // initializes cc as the CollisionCombat script
     }
@@ -226,6 +230,11 @@ public class PlayerController : MonoBehaviour
         bool flipSprite = (dashTimeCounter > 0f) ? (dashDirection == Direction.Left) : (direction == Direction.Left);
         spriteRenderer.flipX = flipSprite;
 
+        // Debug to teleport to boss
+        if (m_DebugAction.WasPressedThisFrame())
+        {
+            transform.position = new Vector2(358, 25f);
+        }
     }
 
     void FixedUpdate()
