@@ -291,6 +291,7 @@ public class PlayerController : MonoBehaviour
         jumpBufferTimeCounter = 0f;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         animator.SetBool("jumping", true);
+        SoundManager.instance.PlaySoundEffect("jump");
         dustParticleSystem.Play();
     }
 
@@ -311,6 +312,8 @@ public class PlayerController : MonoBehaviour
             canTwirlTimeCounter = canTwirlTime;
             dashTimeCounter = dashTime;
             animator.SetBool("dashing", true);
+            SoundManager.instance.PlaySoundEffect("dash");
+            // Freeze gravity while dashing
             rb.gravityScale = 0f; 
             numDashesLeft -= 1;
         }
@@ -335,7 +338,9 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, twirlSpeed);
         canTwirlTimeCounter = 0f;
         animator.SetBool("twirling", true);
+        SoundManager.instance.PlaySoundEffect("twirl");
         twirlParticleSystem.Play();
+        // TODO this should probably have an end twirl function somewhere
         animator.SetBool("twirling", false);
 
     }
