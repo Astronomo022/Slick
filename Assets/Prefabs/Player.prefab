@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 1912790772784492405}
   - component: {fileID: 7871644661548307402}
   - component: {fileID: 3569973944583799509}
-  m_Layer: 0
+  - component: {fileID: 8896401850082371436}
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -299,6 +300,21 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1.375, y: 1.5}
   m_Direction: 0
+--- !u!114 &8896401850082371436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681906969796359551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78544b93594076e4bb365cefd1b3d04d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntStats
+  damage: 0
+  maxHP: 0
+  curHP: 0
 --- !u!1 &2761731149986096137
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,7 +326,7 @@ GameObject:
   - component: {fileID: 470668028351053040}
   - component: {fileID: 5118699268786310169}
   - component: {fileID: 3130080036874335831}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DustParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5204,7 +5220,7 @@ GameObject:
   - component: {fileID: 6533482417317702467}
   - component: {fileID: 7916386266336920894}
   - component: {fileID: 5430142219449788111}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TwirlParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10098,7 +10114,7 @@ GameObject:
   - component: {fileID: 8007950568700051934}
   - component: {fileID: 7193719995432002995}
   - component: {fileID: 6210314823703483321}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

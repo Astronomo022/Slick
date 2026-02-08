@@ -11,48 +11,49 @@ public class CollisionCombat : MonoBehaviour
     /// Call appropriate functions when the player collides with an enemy. 
     /// </summary>
     /// <param name="player">The player GameObject.</param>
-    /// <param name="enemy">The EntStats component of the enemy colliding with the player.</param>
+    /// <param name="enemy">The enemy colliding with the player.</param>
     /// <param name="dash">Whether the player is currently dashing.</param>
-    public void CollisionEnemy(GameObject player, EntStats enemy, bool dash)
+    public void CollisionEnemy(GameObject player, GameObject enemy, bool dash)
     {
-        EntStats jet = player.GetComponentInParent<EntStats>();
-        EnemyAI eai = enemy.GetComponentInChildren<EnemyAI>();
+        Debug.Log("CollisionEnemy function called in CollisionCombat script.");
         PlayerController pc = player.GetComponent<PlayerController>();
+        EnemyAI eai = enemy.GetComponent<EnemyAI>();
+
+        EntStats playerEntityStats = player.GetComponent<EntStats>();
+        EntStats enemyEntityStats = enemy.GetComponent<EntStats>();
+
         if (dash)
         {
-            dead = enemy.Damage(jet.damage);
+            dead = enemyEntityStats.Damage(playerEntityStats.damage);
             if (dead)
             {
                 eai.StopInput();
-                StartCoroutine(enemy.DeathAnim()); // wait for a few seconds for the fiery explode to finish
-                StopCoroutine(enemy.DeathAnim());
+                StartCoroutine(enemyEntityStats.DeathAnim()); // wait for a few seconds for the fiery explode to finish
+                StopCoroutine(enemyEntityStats.DeathAnim());
             }
             else
             {
-                StartCoroutine(enemy.HitAnim());
-                StopCoroutine(enemy.HitAnim());
+                StartCoroutine(enemyEntityStats.HitAnim());
+                StopCoroutine(enemyEntityStats.HitAnim());
             }
         }
 
         if (!dash)
         {
-            dead = jet.Damage(enemy.damage);
+            dead = playerEntityStats.Damage(enemyEntityStats.damage);
             if (dead)
             {
                 pc.StopInput();
-                StartCoroutine(jet.DeathAnim()); // wait for a few seconds for the fiery explode to finish
-                StopCoroutine(jet.DeathAnim());
+                StartCoroutine(playerEntityStats.DeathAnim()); // wait for a few seconds for the fiery explode to finish
+                StopCoroutine(playerEntityStats.DeathAnim());
 
             }
             else
             {
-                StartCoroutine(jet.HitAnim());
-                StopCoroutine(jet.HitAnim());
+                StartCoroutine(playerEntityStats.HitAnim());
+                StopCoroutine(playerEntityStats.HitAnim());
             }
-
         }
-
-
     }
 
     // this is collision reaction but for the boss, since I decided to use a different script than for the boss than an enemy. 
@@ -60,30 +61,32 @@ public class CollisionCombat : MonoBehaviour
     /// Call appropriate functions when the player collides with the boss. 
     /// </summary>
     /// <param name="player">The player GameObject.</param>
-    /// <param name="enemy">The EntStats component of the boss colliding with the player.</param>
+    /// <param name="enemy">The boss colliding with the player.</param>
     /// <param name="dash">Whether the player is currently dashing.</param>
-    public void CollisionBoss(GameObject player, EntStats enemy, bool dash)
+    public void CollisionBoss(GameObject player, GameObject boss, bool dash)
     {
-        EntStats jet = player.GetComponentInParent<EntStats>();
-        BossAI bai = enemy.GetComponentInChildren<BossAI>();
         PlayerController pc = player.GetComponent<PlayerController>();
+        BossAI bai = boss.GetComponent<BossAI>();
+
+        EntStats playerEntityStats = player.GetComponent<EntStats>();
+        EntStats bossEntityStats = boss.GetComponent<EntStats>();
 
         if (dash)
         {
             if (bai.GetIsWeak())
             {
-                dead = enemy.Damage(jet.damage);
+                dead = bossEntityStats.Damage(playerEntityStats.damage);
                 if (dead)
                 {
                     bai.StopInput();
-                    StartCoroutine(enemy.DeathAnim()); // wait for a few seconds for the fiery explode to finish
-                    StopCoroutine(enemy.DeathAnim());
+                    StartCoroutine(bossEntityStats.DeathAnim()); // wait for a few seconds for the fiery explode to finish
+                    StopCoroutine(bossEntityStats.DeathAnim());
 
                 }
                 else
                 {
-                    StartCoroutine(enemy.HitAnim());
-                    StopCoroutine(enemy.HitAnim());
+                    StartCoroutine(bossEntityStats.HitAnim());
+                    StopCoroutine(bossEntityStats.HitAnim());
                 }
             }
             else
@@ -96,22 +99,22 @@ public class CollisionCombat : MonoBehaviour
         if (!dash)
         {
 
-            dead = jet.Damage(enemy.damage);
+            dead = playerEntityStats.Damage(bossEntityStats.damage);
             if (dead)
             {
                 pc.StopInput();
-                StartCoroutine(jet.DeathAnim()); // wait for a few seconds for the fiery explode to finish
-                StopCoroutine(jet.DeathAnim());
+                StartCoroutine(playerEntityStats.DeathAnim()); // wait for a few seconds for the fiery explode to finish
+                StopCoroutine(playerEntityStats.DeathAnim());
 
             }
             else
             {
-                StartCoroutine(jet.HitAnim());
-                StopCoroutine(jet.HitAnim());
+                StartCoroutine(playerEntityStats.HitAnim());
+                StopCoroutine(playerEntityStats.HitAnim());
             }
 
         }
-        
+
         // Fill in from the todo above 
     }
 }

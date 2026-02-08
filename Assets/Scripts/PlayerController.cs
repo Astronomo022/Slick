@@ -135,6 +135,8 @@ public class PlayerController : MonoBehaviour
         m_MoveAction.Enable();
         m_JumpAction.Enable();
         m_DashAction.Enable();
+
+        cc  = GameObject.Find("CollisionSystem").GetComponent<CollisionCombat>(); // initializes cc as the CollisionCombat script
     }
     
     void Update()
@@ -348,21 +350,20 @@ public class PlayerController : MonoBehaviour
     // This function needs 2 separate condition statements, since the Boss AI has it's own script apart from Enemy's
     void OnCollisionEnter2D(Collision2D col)
     {
+        Debug.Log("PlayerController OnCollisionEnter2D detected collision with " + col.gameObject.name);
         EntStats temp;
         CollisionCombat cs; // CollisionCombat object within this script
         bool isDashing = dashTimeCounter > 0f;
         //  on collision enter, the player should do damage to an enemy based on whether it's dashing or not
         if (col.gameObject.tag == "Enemy") // detecting collision as an enemy.
         {
-            temp = col.gameObject.GetComponent<EntStats>(); // intending to pass as an argument to the function below
-            cs = cc.gameObject.GetComponent<CollisionCombat>(); // Doing this to initialize cs as the script
-            cs.CollisionEnemy(this.gameObject, temp, isDashing);// Player, Boss, Dash Check
+            //cs = cc.gameObject.GetComponent<CollisionCombat>(); // Doing this to initialize cs as the script
+            cc.CollisionEnemy(this.gameObject, col.gameObject, isDashing); // Player, Boss, Dash Check
         }
         if (col.gameObject.tag == "Boss") // detecting collision as a boss.
         {
-            temp = col.gameObject.GetComponent<EntStats>(); 
-            cs = cc.gameObject.GetComponent<CollisionCombat>(); 
-            cs.CollisionBoss(this.gameObject, temp, isDashing); // Player, Boss, Dash Check
+            //cs = cc.gameObject.GetComponent<CollisionCombat>(); 
+            cc.CollisionBoss(this.gameObject, col.gameObject, isDashing); // Player, Boss, Dash Check
         }
 
 
