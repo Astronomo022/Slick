@@ -29,6 +29,7 @@ public class LogoAnimation : MonoBehaviour
         }
         
         rectTransform.anchoredPosition = endPos;
+        SoundManager.instance.PlaySoundEffect("title_call");
 
     }
 

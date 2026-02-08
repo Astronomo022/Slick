@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
 
     private Rigidbody2D rb;
-    private BoxCollider2D bc;
+    private CapsuleCollider2D bc;
     private TrailRenderer tr;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        bc = GetComponent<BoxCollider2D>();
+        bc = GetComponent<CapsuleCollider2D>();
         tr = GetComponent<TrailRenderer>();
         animator = this.gameObject.transform.GetChild(0).GetComponent<Animator>();
         spriteRenderer = this.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>();
