@@ -8,6 +8,8 @@ public class SoundManager : MonoBehaviour
     private AudioSource musicAudio;
     private AudioClip[] soundEffectClips;
 
+    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -58,9 +60,9 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlayMusic(string musicFileName)
+    public void PlayMusic()
     {
-        AudioClip clip = Resources.Load<AudioClip>($"Sounds/Music/{musicFileName}");
+        AudioClip clip = Resources.Load<AudioClip>("Sounds/Music/V2/slick boss");
         if (clip != null && musicAudio != null)
         {
             musicAudio.clip = clip;
@@ -68,7 +70,16 @@ public class SoundManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"Music '{musicFileName}' not found or AudioSource not available.");
+            Debug.LogWarning($"Music clip 'slickgame_music_bossfight' not found or AudioSource not available.");
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            Debug.Log("Player entered music trigger");
+            PlayMusic();
         }
     }
 
