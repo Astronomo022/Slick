@@ -26,6 +26,7 @@ public class EnemyAI : MonoBehaviour
     
     void Start()
     {
+        
         rb = GetComponent<Rigidbody2D>();
         Transform spriteObject = this.gameObject.transform.GetChild(0);
         sr = spriteObject.GetComponent<SpriteRenderer>();
@@ -36,6 +37,7 @@ public class EnemyAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(!player);
         AIChase();
         EnemyAnimate();
     }
@@ -72,8 +74,9 @@ public class EnemyAI : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("Enemy trigger with object " + col.gameObject.tag + ", name " + col.gameObject.name);
-        if(col.gameObject.name == "Player")
+        //Debug.Log("Enemy trigger with object " + col.gameObject.tag + ", name " + col.gameObject.name);
+        //Debug.Log("Enemy trigger with object " + col.gameObject.tag + ", name " + col.gameObject.name);
+        if(col.gameObject.tag == "Player")
         {
             detection = true;
         }

@@ -44,4 +44,12 @@ public class AnimEventsManager : MonoBehaviour
         // TODO: boss.SomeMethodToRaiseTheObjectBackUp();
     }
     #endregion
+
+    void Destroy()
+    {
+        // We do it this way, because in the past, when I tried doing it in one line, a NullReferneceException would occur. 
+        Debug.Log("Destroy function called in AnimEventsManager script.");
+        Rigidbody2D original = this.gameObject.GetComponentInParent<Rigidbody2D>(); // GetComponent<> should work too, but this is fine. 
+        Destroy(original.gameObject); // Destoys the gameobject the assigned rb was attached to. 
+    }
 }

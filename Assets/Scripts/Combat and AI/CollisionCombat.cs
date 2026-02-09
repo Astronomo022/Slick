@@ -15,7 +15,7 @@ public class CollisionCombat : MonoBehaviour
     /// <param name="dash">Whether the player is currently dashing.</param>
     public void CollisionEnemy(GameObject player, GameObject enemy, bool dash)
     {
-        Debug.Log("CollisionEnemy function called in CollisionCombat script.");
+        //Debug.Log("CollisionEnemy function called in CollisionCombat script.");
         PlayerController pc = player.GetComponent<PlayerController>();
         EnemyAI eai = enemy.GetComponent<EnemyAI>();
 
@@ -27,6 +27,7 @@ public class CollisionCombat : MonoBehaviour
             dead = enemyEntityStats.Damage(playerEntityStats.damage);
             if (dead)
             {
+                Debug.Log("Enemy has been killed by the player.");
                 eai.StopInput();
                 StartCoroutine(enemyEntityStats.DeathAnim()); // wait for a few seconds for the fiery explode to finish
                 StopCoroutine(enemyEntityStats.DeathAnim());
