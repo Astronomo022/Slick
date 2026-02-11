@@ -14,6 +14,7 @@ public class EntStats : MonoBehaviour
     public bool Damage(int dmg)
     {
         curHP -= dmg;
+        //Debug.Log("Damage is: " + dmg + " Current HP is: " + curHP); // Debug log to check if damage is being applied correctly.
         if (curHP <= 0)
         {
             curHP = 0;
@@ -25,6 +26,20 @@ public class EntStats : MonoBehaviour
     public IEnumerator HitAnim()
     {
         anim = this.gameObject.GetComponentInChildren<Animator>(); // must be done, since type is private in here. 
+
+        if(this.gameObject.tag == "Player")
+        {
+            //sfx.PlayPlayerHit(); // commmented since we dont have an SFX manager yet, just to remove the errors
+            Collider2D playerCollider = this.gameObject.GetComponent<Collider2D>();
+
+            //playerCollider.enabled = false; // disable the player's collider to hopefully prevent pushing
+
+            anim.SetBool("IsHurt", true); // play hurt frame
+            yield return new WaitForSecondsRealtime(0.3f); // may need to wait longer
+            //playerCollider.enabled = true; // re-enable the player's collider 
+            anim.SetBool("IsHurt", false); // set to false so the exit transition triggers for animation
+        }
+
         if(this.gameObject.tag == "Boss")
         {
             Collider2D bossCollider = this.gameObject.GetComponent<Collider2D>();
@@ -49,12 +64,19 @@ public class EntStats : MonoBehaviour
             // Technically, this conditional can go unused for this jam, but were we to add more, we'd set up a system for gameovers and what not. 
             
             // This declaration so we can fetch Collider to prevent more collisions. 
-            Collider2D playerCollider = this.gameObject.GetComponentInChildren<Collider2D>();
+            Collider2D playerCollider = this.gameObject.GetComponent<Collider2D>();
+            PlayerController pc = this.gameObject.GetComponent<PlayerController>();
 
-            playerCollider.gameObject.SetActive(false); // disable the player's collider to hopefully prevent pushing
+            //playerCollider.gameObject.SetActive(false); // disable the player's collider to hopefully prevent pushing
+            pc.StopInput(); // stop player input upon death
+            anim.SetBool("IsHurt", true);
+            yield return new WaitForSecondsRealtime(0.2f);
+            anim.SetBool("IsHurt", false);
+            anim.SetBool("IsDead", true);
 
             //sfx.PlayPlayerDeath(); // commmented since we dont have an SFX manager yet, just to remove the errors
-            yield return new WaitForSecondsRealtime(1.5f); // may need to wait longer
+            yield return new WaitForSecondsRealtime(1.6f);
+            SceneManager.LoadScene("FirstLevel"); // reloads the scene, effectively "respawning" the player.
             
             
         }
@@ -64,10 +86,9 @@ public class EntStats : MonoBehaviour
             // Same as the above in Player.
 
             
-            Collider2D enemyCollider = this.gameObject.GetComponentInChildren<Collider2D>();
+            //Collider2D enemyCollider = this.gameObject.GetComponentInChildren<Collider2D>();
 
             //enemyCollider.enabled = false; // this isn't working for some reason
-            anim = this.gameObject.GetComponentInChildren<Animator>(); 
             anim.SetBool("IsDead", true);
             SoundManager.instance.PlaySoundEffect("enemy_killed"); // Direct call to Sound Manager, may be a problem, but I'll allow it for now. 
             // Don't need a yield return here. The enemy will be destroyed by the AnimEventManager once the death animation is done, so we can just let it be. 
@@ -80,14 +101,15 @@ public class EntStats : MonoBehaviour
         if(this.gameObject.tag == "Boss")
         {
             // Same as the above in Enemy, but for the boss. 
-            
+            Debug.Log("Went through deathanim"); // debugging since it seems anim is not transitioning properly.
             BossAI bossAI = this.gameObject.GetComponent<BossAI>();
-            Collider2D bossCollider = this.gameObject.GetComponentInChildren<Collider2D>();
+            //Collider2D bossCollider = this.gameObject.GetComponent<Collider2D>();// Solution here may be to just make the enemies rb kinematic, but we'll see.
             //Debug.Log("This enemy is: " + this.gameObject.name + "This collider is: " + bossCollider.gameObject.name);
 
             bossAI.StopInput();
+            anim.SetBool("IsHurt", true);
+            yield return new WaitForSecondsRealtime(0.3f);  
             //bossCollider.gameObject.SetActive(false);
-            anim = this.gameObject.GetComponentInChildren<Animator>(); 
             anim.SetBool("IsDead", true); // disable the boss's collider
             SoundManager.instance.PlaySoundEffect("enemy_killed");
             

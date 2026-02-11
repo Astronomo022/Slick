@@ -1,22 +1,10 @@
 fileFormatVersion: 2
-guid: 4a483cac69bb41b44a2dcc60d755bfa7
+guid: 98268dbeab2785a4792c10a88f77a461
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5246532886989371268
-    second: slickgame_player_twirl_0
-  - first:
-      213: -8160836994025817320
-    second: slickgame_player_twirl_1
-  - first:
-      213: -6054496355840477337
-    second: slickgame_player_twirl_2
-  - first:
-      213: 1238910455661496411
-    second: slickgame_player_twirl_3
-  - first:
-      213: 724357408603276186
-    second: slickgame_player_twirl_4
+      213: -5656131530602510923
+    second: slickgame_player_damage_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -58,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -125,34 +113,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: slickgame_player_twirl_0
+      name: slickgame_player_damage_0
       rect:
         serializedVersion: 2
-        x: 16
-        y: 1
-        width: 16
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 487f7670ddd6fc840800000000000000
-      internalID: 5246532886989371268
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slickgame_player_twirl_1
-      rect:
-        serializedVersion: 2
-        x: 51
+        x: 0
         y: 0
-        width: 40
+        width: 23
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -162,74 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 81b793dedf1eebe80800000000000000
-      internalID: -8160836994025817320
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slickgame_player_twirl_2
-      rect:
-        serializedVersion: 2
-        x: 99
-        y: 0
-        width: 32
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7673b3874ab1afba0800000000000000
-      internalID: -6054496355840477337
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slickgame_player_twirl_3
-      rect:
-        serializedVersion: 2
-        x: 159
-        y: 0
-        width: 22
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b588832de7e713110800000000000000
-      internalID: 1238910455661496411
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slickgame_player_twirl_4
-      rect:
-        serializedVersion: 2
-        x: 204
-        y: 0
-        width: 29
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a93883ea93f6d0a00800000000000000
-      internalID: 724357408603276186
+      spriteID: 5b50d8327526181b0800000000000000
+      internalID: -5656131530602510923
       vertices: []
       indices: 
       edges: []
@@ -238,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -248,11 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      slickgame_player_twirl_0: 5246532886989371268
-      slickgame_player_twirl_1: -8160836994025817320
-      slickgame_player_twirl_2: -6054496355840477337
-      slickgame_player_twirl_3: 1238910455661496411
-      slickgame_player_twirl_4: 724357408603276186
+      slickgame_player_damage_0: -5656131530602510923
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
