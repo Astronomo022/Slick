@@ -86,9 +86,10 @@ public class EntStats : MonoBehaviour
             // Same as the above in Player.
 
             
-            //Collider2D enemyCollider = this.gameObject.GetComponentInChildren<Collider2D>();
+            Collider2D enemyCollider = this.gameObject.GetComponentInChildren<BoxCollider2D>(); // Get the collider of the enemy, which is on the child object.
+            Debug.Log("Gameobject name: "+ enemyCollider.gameObject.name);
 
-            //enemyCollider.enabled = false; // this isn't working for some reason
+            enemyCollider.gameObject.SetActive(false); // this isn't working for some reason
             anim.SetBool("IsDead", true);
             SoundManager.instance.PlaySoundEffect("enemy_killed"); // Direct call to Sound Manager, may be a problem, but I'll allow it for now. 
             // Don't need a yield return here. The enemy will be destroyed by the AnimEventManager once the death animation is done, so we can just let it be. 
@@ -112,6 +113,10 @@ public class EntStats : MonoBehaviour
             //bossCollider.gameObject.SetActive(false);
             anim.SetBool("IsDead", true); // disable the boss's collider
             SoundManager.instance.PlaySoundEffect("enemy_killed");
+
+            // This next series NEEDS to be changed, should there be more than one boss, this is just for now. 
+            yield return new WaitForSecondsRealtime(1.2f);// Give the player time to process.
+            SceneManager.LoadScene("MainMenu"); // Load the main menu after the boss dies. 
             
         }
 

@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
+
 
 // This script is meant to be used for the animation events I placed within the animations of the Boss and elsewhere. 
 // IMPORTANT: ANY FUNCTIONS IN THIS SCRIPT /MUST/ BE PUBLIC!
@@ -43,6 +46,7 @@ public class AnimEventsManager : MonoBehaviour
         StopCoroutine(boss.StartRising());
         // TODO: boss.SomeMethodToRaiseTheObjectBackUp();
     }
+    
     #endregion
 
     void Destroy()
