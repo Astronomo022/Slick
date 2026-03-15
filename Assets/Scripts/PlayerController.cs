@@ -378,6 +378,12 @@ public class PlayerController : MonoBehaviour
 
 
     }
+
+    public void BouncePlayer(float bounceForce)
+    {
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce);
+    }
+    
     public void Animate()
     {
        /* bool isMoving;

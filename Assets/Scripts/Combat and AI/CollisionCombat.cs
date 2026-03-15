@@ -6,14 +6,13 @@ public class CollisionCombat : MonoBehaviour
 {
     private PlayerController pc;
 
-    bool dead;
     /// <summary>
     /// Call appropriate functions when the player collides with an enemy. 
     /// </summary>
     /// <param name="player">The player GameObject.</param>
     /// <param name="enemy">The enemy colliding with the player.</param>
-    /// <param name="dash">Whether the player is currently dashing.</param>
-    public void CollisionEnemy(GameObject player, GameObject enemy, bool dash)
+    /// <param name="isPlayerDashing">Whether the player is currently dashing.</param>
+    public void CollisionEnemy(GameObject player, GameObject enemy, bool isPlayerDashing)
     {
         //Debug.Log("CollisionEnemy function called in CollisionCombat script.");
         PlayerController pc = player.GetComponent<PlayerController>();
@@ -21,13 +20,17 @@ public class CollisionCombat : MonoBehaviour
 
         EntStats playerEntityStats = player.GetComponent<EntStats>();
         EntStats enemyEntityStats = enemy.GetComponent<EntStats>();
+        bool isEnemyDead, isPlayerDead; // booleans to check if either entity is dead after the damage is applied.
 
-        if (dash)
+        if (isPlayerDashing)
         {
-            dead = enemyEntityStats.Damage(playerEntityStats.damage);
-            if (dead)
+            isEnemyDead = enemyEntityStats.Damage(playerEntityStats.damage);
+            if (isEnemyDead)
             {
                 Debug.Log("Enemy has been killed by the player.");
+                // TODO: Move to its own method
+                enemy.GetComponent<Collider2D>().enabled = false; // disable the enemy's collider to hopefully prevent pushing after death
+                enemy.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // stop the enemy's movement immediately after death
                 eai.StopInput();
                 StartCoroutine(enemyEntityStats.DeathAnim()); // wait for a few seconds for the fiery explode to finish
                 StopCoroutine(enemyEntityStats.DeathAnim());
@@ -39,10 +42,11 @@ public class CollisionCombat : MonoBehaviour
             }
         }
 
-        if (!dash)
+        if (!isPlayerDashing)
         {
-            dead = playerEntityStats.Damage(enemyEntityStats.damage);
-            if (dead)
+            isPlayerDead = playerEntityStats.Damage(enemyEntityStats.damage);
+            player.GetComponent<PlayerController>().BouncePlayer(10f); // bounce the player up with a force of 10, may need to be tweaked for better feel.
+            if (isPlayerDead)
             {
                 pc.StopInput();
                 StartCoroutine(playerEntityStats.DeathAnim()); // wait for a few seconds for the fiery explode to finish
@@ -71,15 +75,16 @@ public class CollisionCombat : MonoBehaviour
 
         EntStats playerEntityStats = player.GetComponent<EntStats>();
         EntStats bossEntityStats = boss.GetComponent<EntStats>();
+        bool isEnemyDead, isPlayerDead; // booleans to check if either entity is dead after the damage is applied.
 
-        Debug.Log(pc + " " + bai + " " + playerEntityStats + " " + bossEntityStats);
+        //Debug.Log(pc + " " + bai + " " + playerEntityStats + " " + bossEntityStats);
 
         if (dash)
         {
             if (bai.GetIsWeak())
             {
-                dead = bossEntityStats.Damage(playerEntityStats.damage);
-                if (dead)
+                isEnemyDead = bossEntityStats.Damage(playerEntityStats.damage);
+                if (isEnemyDead)
                 {
                     bai.StopInput();
                     StartCoroutine(bossEntityStats.DeathAnim()); // wait for a few seconds for the fiery explode to finish
@@ -101,8 +106,8 @@ public class CollisionCombat : MonoBehaviour
         if (!dash)
         {
 
-            dead = playerEntityStats.Damage(bossEntityStats.damage);
-            if (dead)
+            isPlayerDead = playerEntityStats.Damage(bossEntityStats.damage);
+            if (isPlayerDead)
             {
                 pc.StopInput();
                 StartCoroutine(playerEntityStats.DeathAnim()); // wait for a few seconds for the fiery explode to finish
