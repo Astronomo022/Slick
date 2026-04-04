@@ -23,7 +23,7 @@ public class BossAI : MonoBehaviour
     //float elevation; // may not be needed in this project, but here just in case. 
 
     bool detection; // whether the enemy has detected the player or not.
-    public bool isGrounded, isFalling, isOpen;
+    public bool isGrounded, isFalling, isOpen,isMoving;
     private bool isWeak,isUnder,isAttacking,isClosing,resetIdle;
     public BoxCollider2D roomTrigger,attackTrigger; 
     void Awake()
@@ -39,6 +39,8 @@ public class BossAI : MonoBehaviour
     void Start()
     {
         isGrounded = IsGrounded();
+
+        // dawned on me that I do not need to initialize these, since by default all declarations are false. -Ast
         isWeak = false;
         isAttacking = false;
         isClosing = false;
@@ -61,14 +63,14 @@ public class BossAI : MonoBehaviour
                 detection = false;
                 return;
             }
-        if(!isAttacking && !isClosing) // Doesn't allow movement unless the flags isAttacking and isClosing are false
+            if(!isAttacking && !isClosing) // Doesn't allow movement unless the flags isAttacking and isClosing are false
             {
             // Mathf.Sign may not need to be here, we can remove if need be. 
             direction = Mathf.Sign(player.position.x - transform.position.x);
             
 
 
-            // should move the rb in the direction of the player. Needs to be tested. 
+            // should move the rb in the direction of the player. second arg is empty, we just wanna follow horizontally. 
             rb.linearVelocity = new Vector2(direction * chaseSpeed, rb.linearVelocity.y); 
             }
         }
@@ -123,15 +125,21 @@ public class BossAI : MonoBehaviour
 
     void BossAnimate()
     {
-        // Placeholder for future animation code
-        bool isMoving;
+        // bool isMoving; // making this variable global, I probably shoulda done it a while ago. 
         // This nest is checking if you're moving or not. 
+
+        /* commented this out, because for the var isMoving would be constantly updated every frame.
+           we don't want to do that, so instead, we only allow the animation if isMoving is enabled by
+           a Trigger collision, and disabled in other animations. The detection var is a good
+           variable to stop movement, so we'll just follow that. 
+
         if(direction > 0.1f || direction < -0.1f) 
             isMoving = true;
         else
         {
             isMoving = false;
         }
+        */
         if(isGrounded)
         {
             isUnder = false;
@@ -157,6 +165,7 @@ public class BossAI : MonoBehaviour
         if(col.gameObject.tag == "Player" && col.IsTouching(roomTrigger) && !isAttacking)
         {
             detection = true;
+            isMoving = true;
             Debug.Log("Player Detected");
 
         } 
@@ -166,6 +175,7 @@ public class BossAI : MonoBehaviour
             isAttacking = true;
             isUnder = true;
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            direction = 0f;
             detection = false;
         }
     }
@@ -192,10 +202,12 @@ public class BossAI : MonoBehaviour
     public IEnumerator StartRising()
     {
         isClosing = true;
+        isMoving = false;
         resetIdle = true;
         rb.gravityScale = -0.3f * riseSpeed; // starts the boss rising by enabling gravity.
         yield return new WaitForSeconds(2.2f); // Wait for a short time to allow falling animation to play
         rb.gravityScale = 0; // Reset gravity scale after falling animation is complete
+        //isMoving = true; // dont need to set moving until it touches the roomTrigger again. 
         resetIdle = false;
         isClosing = false;
 

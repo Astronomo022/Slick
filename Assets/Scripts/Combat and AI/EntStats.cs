@@ -42,11 +42,14 @@ public class EntStats : MonoBehaviour
 
         if(this.gameObject.tag == "Boss")
         {
-            Collider2D bossCollider = this.gameObject.GetComponent<Collider2D>();
+            //Collider2D bossCollider = this.gameObject.GetComponent<Collider2D>();
+            //Rigidbody2D bossRB = this.gameObject.GetComponent<Rigidbody2D>();
+            //bossRB.simulated = false; // disable the boss's physics to hopefully prevent pushing
             //bossCollider.enabled = false; // disable the boss's collider
             anim.SetBool("IsHurt", true); // play hurt frame
             yield return new WaitForSecondsRealtime(0.3f); // may need to wait longer
             //bossCollider.enabled = true; // re-enable the boss's collider 
+            //bossRB.simulated = true; // re-enable the boss's physics
             anim.SetBool("IsHurt", false); // set to tfalse so the exit transition triggers for animation
         }
        
@@ -87,9 +90,10 @@ public class EntStats : MonoBehaviour
 
             
             Collider2D enemyCollider = this.gameObject.GetComponentInChildren<BoxCollider2D>(); // Get the collider of the enemy, which is on the child object.
-            Debug.Log("Gameobject name: "+ enemyCollider.gameObject.name);
-
-            enemyCollider.gameObject.SetActive(false); // this isn't working for some reason
+            //Debug.Log("Gameobject name: "+ enemyCollider.gameObject.name);
+            //enemyCollider.gameObject.SetActive(false); // this isn't working for some reason
+            enemyCollider.gameObject.layer = LayerMask.NameToLayer("DeadEnemy"); // This so that the collider child doesn't interact
+            this.gameObject.layer = LayerMask.NameToLayer("DeadEnemy"); // set the enemy to a layer that won't interact with the player, since disabling the collider isn't working for some reason.
             anim.SetBool("IsDead", true);
             SoundManager.instance.PlaySoundEffect("enemy_killed"); // Direct call to Sound Manager, may be a problem, but I'll allow it for now. 
             // Don't need a yield return here. The enemy will be destroyed by the AnimEventManager once the death animation is done, so we can just let it be. 
