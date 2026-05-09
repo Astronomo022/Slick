@@ -120,7 +120,7 @@ public class EntStats : MonoBehaviour
 
             // This next series NEEDS to be changed, should there be more than one boss, this is just for now. 
             yield return new WaitForSecondsRealtime(1.2f);// Give the player time to process.
-            SceneManager.LoadScene("MainMenu"); // Load the main menu after the boss dies. 
+            SceneManager.LoadScene("CreditsMenu"); // Load the credits menu after the boss dies. 
             
         }
 

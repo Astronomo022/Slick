@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.InputSystem;
 
 
-public class MainMenuController : MonoBehaviour
+public class CreditsMenuController : MonoBehaviour
 {
     private InputAction m_MoveAction;
     private InputAction m_JumpAction;
@@ -43,7 +43,7 @@ public class MainMenuController : MonoBehaviour
         // Assuming "Logo" and "ContinueText" are GameObjects in the Canvas
         GameObject logo = GameObject.Find("Logo");
         GameObject continueText = GameObject.Find("ContinueText");
-        //GameObject creditText = GameObject.Find("CreditsText");
+        GameObject creditText = GameObject.Find("CreditsText");
 
         // Start the slide-out animation for the logo
         /*
@@ -58,8 +58,8 @@ public class MainMenuController : MonoBehaviour
         }
         */
         // We want this to run at the same time as the logo, but need to also depend on the logo's runtime to load into the next level. 
-        //creditText.GetComponent<ContinueTextAnimation>().enabled = false;
-        //StartCoroutine(creditText.GetComponent<CreditsAnimation>().SlideOutToRight());
+        creditText.GetComponent<ContinueTextAnimation>().enabled = false;
+        StartCoroutine(creditText.GetComponent<CreditsAnimation>().SlideOutToRight());
         
 
         yield return StartCoroutine(logo.GetComponent<LogoAnimation>().SlideOutToLeft());
