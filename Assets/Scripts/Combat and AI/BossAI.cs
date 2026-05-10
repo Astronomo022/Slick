@@ -162,8 +162,10 @@ public class BossAI : MonoBehaviour
     // This function automatically runs if a gameobject's tag is named with "Player"
     void OnTriggerEnter2D(Collider2D col)
     {
+        
         if(col.gameObject.tag == "Player" && col.IsTouching(roomTrigger) && !isAttacking)
         {
+            SoundManager.instance.PlaySoundEffect("boss_siren"); // plays incidentally when starting attack, I'll allow it for now. 
             detection = true;
             isMoving = true;
             Debug.Log("Player Detected");
@@ -184,16 +186,20 @@ public class BossAI : MonoBehaviour
     {
         //anim.SetFloat("X", rb.linearVelocity.x); // Resets the X parameter to 0, 
         rb.gravityScale = 1 * fallSpeed; // starts the boss falling by enabling gravity.
+        SoundManager.instance.PlaySoundEffect("boss_falling");
         yield return new WaitForSeconds(1.2f); // Wait for a short time to allow falling animation to play
         rb.gravityScale = 0; // Reset gravity scale after falling animation is complete
     }
 
     public IEnumerator StartWeakTimer()
     {
+        SoundManager.instance.PlaySoundEffect("boss_slam_ground");
+        SoundManager.instance.PlaySoundEffect("boss_open");
         isWeak = true;
         //Debug.Log("Weak timer started");
         yield return new WaitForSeconds(3f); // Boss is weak for 3 seconds, may need to adjust.
        // Debug.Log("Weak timer ended");
+       SoundManager.instance.PlaySoundEffect("boss_close");
         isWeak = false;
         isAttacking = false; // Resets the attack after the weak timer runs out.
         isClosing = true; 
@@ -201,6 +207,7 @@ public class BossAI : MonoBehaviour
 
     public IEnumerator StartRising()
     {
+        SoundManager.instance.PlaySoundEffect("boss_close");
         isClosing = true;
         isMoving = false;
         resetIdle = true;

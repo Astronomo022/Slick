@@ -45,7 +45,7 @@ public class CollisionCombat : MonoBehaviour
         if (!isPlayerDashing)
         {
             isPlayerDead = playerEntityStats.Damage(enemyEntityStats.damage);
-            player.GetComponent<PlayerController>().BouncePlayer(10f); // bounce the player up with a force of 10, may need to be tweaked for better feel.
+            player.GetComponent<PlayerController>().BouncePlayer(14f); // bounce the player up with a force of 10, may need to be tweaked for better feel.
             if (isPlayerDead)
             {
                 pc.StopInput();

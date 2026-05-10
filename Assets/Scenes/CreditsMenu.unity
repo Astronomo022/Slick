@@ -482,8 +482,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "credits\n \nProgrammers\nAstronomo , Aurath\n\nSound\nBuilder DI, Doktrin\n\nDesign
-    / Art \nBuilder Di\n"
+  m_text: "credits\n \nProgrammers\nAstronomo , Aurath\n\nSound\nBuilder DI(sfx),
+    Doktrin(music)\n\nDesign / Art \nBuilder Di\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d10eb408626d3ef4895e0a71c493867c, type: 2}
   m_sharedMaterial: {fileID: -3127573694063744925, guid: d10eb408626d3ef4895e0a71c493867c, type: 2}
@@ -1192,7 +1192,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -504, y: 699}
+  m_AnchoredPosition: {x: -534, y: 699}
   m_SizeDelta: {x: 1075.5, y: 344.382}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1227729451

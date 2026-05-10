@@ -18,12 +18,12 @@ namespace _Scripts
             //Getting the starting X position of sprite.
             _startingPos = transform.position.x;
             //Getting the length of the sprites.
-            _lengthOfSprite = GetComponent<SpriteRenderer>().bounds.size.x;
+            _lengthOfSprite = GetComponentInChildren<SpriteRenderer>().bounds.size.x;
         }
 
 
 
-        private void Update()
+        private void FixedUpdate()
         {
             Vector3 Position = MainCamera.transform.position;
             float Temp = Position.x * (1 - AmountOfParallax);
@@ -33,11 +33,12 @@ namespace _Scripts
 
             transform.position = NewPosition;
 
-            if (Temp > _startingPos + (_lengthOfSprite / 2))
+            // For future reference, rememeber not to do startpos +- (length/2) to avoid teleporting sprites
+            if (Temp > _startingPos + _lengthOfSprite )
             {
                 _startingPos += _lengthOfSprite;
             }
-            else if (Temp < _startingPos - (_lengthOfSprite / 2))
+            else if (Temp < _startingPos - _lengthOfSprite )
             {
                 _startingPos -= _lengthOfSprite;
             }

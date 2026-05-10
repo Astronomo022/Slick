@@ -35,6 +35,7 @@ public class EntStats : MonoBehaviour
             //playerCollider.enabled = false; // disable the player's collider to hopefully prevent pushing
 
             anim.SetBool("IsHurt", true); // play hurt frame
+            SoundManager.instance.PlaySoundEffect("player_damaged");
             yield return new WaitForSecondsRealtime(0.3f); // may need to wait longer
             //playerCollider.enabled = true; // re-enable the player's collider 
             anim.SetBool("IsHurt", false); // set to false so the exit transition triggers for animation
@@ -47,6 +48,7 @@ public class EntStats : MonoBehaviour
             //bossRB.simulated = false; // disable the boss's physics to hopefully prevent pushing
             //bossCollider.enabled = false; // disable the boss's collider
             anim.SetBool("IsHurt", true); // play hurt frame
+            SoundManager.instance.PlaySoundEffect("boss_slam_ground");
             yield return new WaitForSecondsRealtime(0.3f); // may need to wait longer
             //bossCollider.enabled = true; // re-enable the boss's collider 
             //bossRB.simulated = true; // re-enable the boss's physics
@@ -76,6 +78,7 @@ public class EntStats : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.2f);
             anim.SetBool("IsHurt", false);
             anim.SetBool("IsDead", true);
+            SoundManager.instance.PlaySoundEffect("player_killed");
 
             //sfx.PlayPlayerDeath(); // commmented since we dont have an SFX manager yet, just to remove the errors
             yield return new WaitForSecondsRealtime(1.6f);
@@ -114,9 +117,11 @@ public class EntStats : MonoBehaviour
             bossAI.StopInput();
             anim.SetBool("IsHurt", true);
             yield return new WaitForSecondsRealtime(0.3f);  
+            SoundManager.instance.PlaySoundEffect("player_damaged");
             //bossCollider.gameObject.SetActive(false);
             anim.SetBool("IsDead", true); // disable the boss's collider
-            SoundManager.instance.PlaySoundEffect("enemy_killed");
+            yield return new WaitForSecondsRealtime(0.3f);// sfx keeps playing out of time, this is my attempt to fix it
+            SoundManager.instance.PlaySoundEffect("player_killed");
 
             // This next series NEEDS to be changed, should there be more than one boss, this is just for now. 
             yield return new WaitForSecondsRealtime(1.2f);// Give the player time to process.
